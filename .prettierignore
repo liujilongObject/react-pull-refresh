@@ -1,1 +1,17 @@
- 
+# 构建产物
+build
+dist
+coverage
+
+# 依赖
+node_modules
+
+# 其他文件
+*.log
+.DS_Store
+.env*
+.idea
+.vscode
+*.lock
+package-lock.json
+yarn.lock 

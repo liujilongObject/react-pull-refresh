@@ -31,9 +31,9 @@ class Home extends Component {
 
   handleLoadMore = async () => {
     const { page, list } = this.state;
-    
+
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
+
     const newData = Array.from({ length: 10 }, (_, i) => ({
       id: list.length + i + 1,
       title: `项目 ${list.length + i + 1}`
@@ -70,4 +70,4 @@ class Home extends Component {
   }
 }
 
-export default Home; 
+export default Home;

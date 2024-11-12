@@ -1,70 +1,171 @@
-# Getting Started with Create React App
+# React Pull Refresh
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+一个轻量级的 React 下拉刷新和上拉加载容器组件，专为移动端设计，提供流畅的交互体验。
 
-## Available Scripts
+## 特性
 
-In the project directory, you can run:
+- 🚀 轻量级，零外部依赖
+- 💫 流畅的动画效果和状态过渡
+- 🎯 精确的触摸响应和手势控制
+- 📱 专为移动端优化
+- 🎨 可自定义样式和主题
+- 🔄 支持下拉刷新
+- ⬆️ 支持上拉加载更多
+- 📜 自动滚动到新加载内容
+- 🎭 丰富的状态反馈
+- ⚡️ 使用 RAF 优化性能
 
-### `npm start`
+## 快速开始
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+1. 克隆项目
+```bash
+git clone https://github.com/your-username/react-pull-refresh.git
+cd react-pull-refresh
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+2. 安装依赖
+```bash
+npm install
+```
 
-### `npm test`
+3. 启动开发服务器
+```bash
+npm start
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 使用示例
 
-### `npm run build`
+```jsx
+import ScrollContainer from './components/ScrollContainer';
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+function App() {
+  const handleRefresh = async () => {
+    // 处理下拉刷新
+    const data = await fetchNewData();
+    setList(data);
+  };
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+  const handleLoadMore = async () => {
+    // 处理上拉加载
+    const newData = await fetchMoreData(page);
+    setList(prev => [...prev, ...newData]);
+  };
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+  return (
+    <div style={{ height: '100vh' }}>
+      <ScrollContainer
+        hasMore={true}
+        onRefresh={handleRefresh}
+        onLoadMore={handleLoadMore}
+      >
+        <YourListComponent data={list} />
+      </ScrollContainer>
+    </div>
+  );
+}
+```
 
-### `npm run eject`
+## 组件属性
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+| 属性 | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| hasMore | boolean | true | 是否还有更多数据可加载 |
+| onRefresh | () => Promise<void> | null | 下拉刷新的回调函数 |
+| onLoadMore | () => Promise<void> | null | 上拉加载的回调函数 |
+| children | ReactNode | - | 容器内容 |
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 使用注意
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+1. 容器样式
+```jsx
+// 确保父容器有固定高度
+<div style={{ height: '100vh' }}>
+  <ScrollContainer>
+    {/* 内容 */}
+  </ScrollContainer>
+</div>
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+2. 异步处理
+```jsx
+// 正确处理异步加载状态
+const handleLoadMore = async () => {
+  try {
+    const data = await fetchData();
+    setList(prev => [...prev, ...data]);
+  } catch (error) {
+    // 错误处理
+  }
+};
+```
 
-## Learn More
+3. 列表状态管理
+```jsx
+// 管理加载状态和数据
+const [hasMore, setHasMore] = useState(true);
+const [list, setList] = useState([]);
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+// 在数据加载完成后更新状态
+const handleLoadMore = async () => {
+  const data = await fetchData();
+  setList(prev => [...prev, ...data]);
+  setHasMore(data.length > 0);
+};
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 自定义样式
 
-### Code Splitting
+组件使用 SCSS 模块化样式，你可以通过覆盖以下类名来自定义样式：
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```scss
+.scroll-container-wrapper {
+  // 容器样式
+  .pull-down-refresh {
+    // 下拉刷新区域样式
+  }
+  
+  .load-more {
+    // 上拉加载区域样式
+  }
+}
+```
 
-### Analyzing the Bundle Size
+## 项目结构
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```
+src/
+  ├── components/
+  │   └── ScrollContainer/
+  │       ├── index.jsx        # 主组件
+  │       ├── style.scss       # 组件样式
+  ├── pages/
+  │   └── Home/               # 示例页面
+  └── styles/
+      └── global.scss         # 全局样式
+```
 
-### Making a Progressive Web App
+## 开发
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```bash
+# 安装依赖
+npm install
 
-### Advanced Configuration
+# 启动开发服务器
+npm start
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+# 代码格式化
+npm run format
 
-### Deployment
+# 代码检查
+npm run lint
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## 浏览器支持
 
-### `npm run build` fails to minify
+- iOS Safari >= 9
+- Android Chrome >= 50
+- 其他现代浏览器
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## License
+
+MIT

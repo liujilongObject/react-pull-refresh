@@ -4,4 +4,4 @@ import './styles/global.scss';
 
 const App = () => <Home />;
 
-export default App; 
+export default App;
