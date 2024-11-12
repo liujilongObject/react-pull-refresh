@@ -255,9 +255,11 @@ class ScrollContainer extends Component {
     const container = this.containerRef.current;
     if (container) {
       const scrollHeight = container.scrollHeight;
+      const clientHeight = container.clientHeight;
+      const targetScrollTop = scrollHeight - clientHeight;
       container.scrollTo({
-        top: scrollHeight,
-        behavior: 'smooth' // 使用平滑滚动效果
+        top: targetScrollTop,
+        behavior: 'smooth'
       });
     }
   };
@@ -274,7 +276,6 @@ class ScrollContainer extends Component {
    * 4. finally 中重置所有状态
    */
   handleTouchEnd = async () => {
-    // 取消可能正在进行的动画
     this.cancelAnimation();
     const { isRefreshing, canRefresh, isLoading, canLoadMore } = this.state;
     const { onRefresh, onLoadMore } = this.props;
@@ -285,12 +286,9 @@ class ScrollContainer extends Component {
     // 3. 存在刷新回调函数
     if (canRefresh && !isRefreshing && onRefresh) {
       try {
-        // 更新状态为刷新中
         this.setState({ isRefreshing: true, canRefresh: false });
-        // 等待刷新完成
         await onRefresh();
       } finally {
-        // 无论成功失败都重置状态
         this.resetState();
       }
     }
@@ -300,20 +298,18 @@ class ScrollContainer extends Component {
     // 3. 存在加载回调函数
     else if (canLoadMore && !isLoading && onLoadMore) {
       try {
-        // 更新状态为加载中
         this.setState({ isLoading: true, canLoadMore: false });
-        // 等待加载完成
         await onLoadMore();
-        // 使用 requestAnimationFrame 确保在 DOM 更新后再滚动
         requestAnimationFrame(() => {
-          this.scrollToBottom(); // 滚动到新加载的内容
+          this.scrollToBottom();
+          setTimeout(() => {
+            this.resetState();
+          }, 300);
         });
-      } finally {
-        // 无论成功失败都重置状态
+      } catch (error) {
         this.resetState();
       }
     } else {
-      // 如果没有触发刷新或加载，直接重置状态
       this.resetState();
     }
   };
