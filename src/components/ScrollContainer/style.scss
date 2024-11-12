@@ -8,7 +8,6 @@
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     background: #fff;
-    touch-action: none;
   }
 
   .scroll-content {
@@ -32,7 +31,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #f5f5f5;
+    background-color: transparent;
     font-size: 14px;
     color: #666;
     overflow: hidden;
@@ -93,7 +92,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #f5f5f5;
+    background-color: transparent;
     font-size: 14px;
     color: #666;
     z-index: 1;

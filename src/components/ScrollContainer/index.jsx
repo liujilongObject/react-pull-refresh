@@ -226,7 +226,7 @@ class ScrollContainer extends Component {
     // 2. scrollTop === 0 确保在顶部才能下拉
     if (distance > 0 && scrollTop === 0) {
       // 阻止默认滚动行为，专注于下拉刷新
-      e.preventDefault();
+      e.cancelable && e.preventDefault();
       // 使用 0.6 的阻尼系数让下拉感觉更自然，最大高度限制为 80px
       const refreshHeight = Math.min(distance * 0.6, 80);
       this.updateRefreshHeight(refreshHeight);
@@ -236,7 +236,7 @@ class ScrollContainer extends Component {
     // 2. isAtBottom 确保在底部才能上拉
     // 3. hasMore 确保还有更多数据可加载
     else if (distance < 0 && isAtBottom && this.props.hasMore) {
-      e.preventDefault();
+      e.cancelable && e.preventDefault();
       // 同样使用 0.6 的阻尼系数，保持操作的一致性
       const loadMoreHeight = Math.min(Math.abs(distance) * 0.6, 80);
       this.updateLoadMoreHeight(loadMoreHeight);
