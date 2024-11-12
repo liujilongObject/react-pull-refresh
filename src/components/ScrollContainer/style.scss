@@ -14,7 +14,7 @@
   .scroll-content {
     min-height: 100%;
     will-change: transform;
-    transition: transform 0.2s cubic-bezier(0.215, 0.610, 0.355, 1);
+    transition: transform 0.2s cubic-bezier(0.215, 0.61, 0.355, 1);
     background: #fff;
     position: relative;
   }
@@ -167,7 +167,8 @@
 }
 
 @keyframes bounce {
-  from, to {
+  from,
+  to {
     transform: scale(1);
   }
   50% {
