@@ -174,6 +174,17 @@ class ScrollContainer extends Component {
     }
   };
 
+  scrollToBottom = () => {
+    const container = this.containerRef.current;
+    if (container) {
+      const scrollHeight = container.scrollHeight;
+      container.scrollTo({
+        top: scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   handleTouchEnd = async () => {
     this.cancelAnimation();
     const { isRefreshing, canRefresh, isLoading, canLoadMore } = this.state;
@@ -190,6 +201,9 @@ class ScrollContainer extends Component {
       try {
         this.setState({ isLoading: true, canLoadMore: false });
         await onLoadMore();
+        requestAnimationFrame(() => {
+          this.scrollToBottom();
+        });
       } finally {
         this.resetState();
       }
@@ -236,7 +250,7 @@ class ScrollContainer extends Component {
           <div 
             className="scroll-content"
             style={{ 
-              transform: `translate3d(0, ${refreshHeight}px, 0)`
+              transform: `translate3d(0, ${refreshHeight - (showLoadMore ? loadMoreHeight : 0)}px, 0)`
             }}
           >
             <div
@@ -256,7 +270,9 @@ class ScrollContainer extends Component {
             isLoading ? 'loading' : ''
           } ${showLoadMore ? 'active' : ''}`}
           style={{
-            transform: `translateY(${showLoadMore && loadMoreHeight ? 0 : '100%'})`
+            position: 'absolute',
+            transform: 'none',
+            bottom: showLoadMore ? 0 : '-80px'
           }}
         >
           {this.loadingStatusContent}

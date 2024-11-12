@@ -86,11 +86,10 @@
 
   .load-more {
     height: 80px;
-    position: fixed;
+    position: absolute;
     left: 0;
     right: 0;
-    bottom: 0;
-    transform: translateY(100%);
+    bottom: -80px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -100,9 +99,8 @@
     z-index: 1;
     overflow: hidden;
     will-change: transform;
-    pointer-events: none;
+    transition: bottom 0.2s ease;
     opacity: 0;
-    transition: opacity 0.2s ease;
 
     &.active {
       opacity: 1;
